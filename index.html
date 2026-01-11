@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { margin: 0; display: flex; flex-direction: column; height: 100vh; font-family: sans-serif; background: #202124; }
+        .toolbar { padding: 10px; display: flex; gap: 10px; background: #35363a; }
+        input { flex: 1; padding: 8px 15px; border-radius: 20px; border: none; outline: none; background: #202124; color: white; }
+        button { background: #5f6368; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #8ab4f8; color: black; }
+        webview { flex: 1; background: white; }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button onclick="view.goBack()">⬅</button>
+        <button onclick="view.goForward()">➡</button>
+        <button onclick="view.reload()">↻</button>
+        <input type="text" id="url" placeholder="Enter URL (e.g., youtube.com)" onkeydown="if(event.key==='Enter') load()">
+        <button onclick="load()">Go</button>
+    </div>
+
+    <webview id="view" src="https://www.google.com"></webview>
+
+    <script>
+        const view = document.getElementById('view');
+        const input = document.getElementById('url');
+
+        function load() {
+            let val = input.value;
+            if (!val.startsWith('http')) val = 'https://' + val;
+            view.src = val;
+        }
+
+        // Keep the address bar updated
+        view.addEventListener('did-navigate', (e) => {
+            input.value = e.url;
+        });
+    </script>
+</body>
+</html>
